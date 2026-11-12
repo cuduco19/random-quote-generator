@@ -14,6 +14,7 @@ const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
 const newBtn = document.getElementById('new-quote');
 const copyBtn = document.getElementById('copy-btn');
+const tweetBtn = document.getElementById('tweet-btn');
 
 async function fetchQuote() {
     try {
@@ -40,7 +41,7 @@ function renderQuote({ content, author }) {
     quoteAuthor.textContent = `— ${author}`;
 }
 
-async function newQuote() {
+const newQuote = async () => {
     // show loading state
     quoteText.textContent = 'Loading quote...';
     quoteAuthor.textContent = '';
@@ -74,6 +75,19 @@ copyBtn.addEventListener('click', async () => {
         console.err('Copy failed', err);
         alert('Copy failed. Your browser may not support clipboard API.');
     }
+});
+
+// share quote on Twitter/X in a new window
+tweetBtn.addEventListener('click', () => {
+    const text = `"${quoteText.textContent}" ${quoteAuthor.textContent}`.trim();
+
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+
+    window.open(
+        tweetUrl,
+        '_blank',
+        'noopener,noreferrer,width=600,height=400'
+    );
 });
 
 newBtn.addEventListener('click', newQuote);

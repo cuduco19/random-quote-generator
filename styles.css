@@ -53,3 +53,9 @@ button.primary {
 button.secondary {
     background: #eef2f7;
 }
+
+button.tweet {
+    background: #1da1f2;
+    color: #fff;
+    margin-right: auto;
+}
