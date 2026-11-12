@@ -1,6 +1,6 @@
 //app.js (ES module)
 //const API = 'https://api.quotable.io/random';
-const API = 'https://dummyjson.com/quotes/randasdom';
+const API = 'https://dummyjson.com/quotes/randdssom';
 
 // Fallback quotes
 const FALLBACK = [
@@ -37,6 +37,7 @@ async function fetchQuote() {
 function renderQuote({ content, author }) {
     quoteText.textContent = content;
     quoteAuthor.textContent = `— ${author}`;
+    throw new Error(`Failure to render`);
 }
 
 async function newQuote() {
