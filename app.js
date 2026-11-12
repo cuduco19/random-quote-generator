@@ -18,6 +18,7 @@ const copyBtn = document.getElementById('copy-btn');
 async function fetchQuote() {
     try {
         const res = await fetch(API);
+        
         if(!res.ok)
             throw new Error(`API error: ${res.status}`);
 
