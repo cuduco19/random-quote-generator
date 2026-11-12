@@ -1,6 +1,8 @@
-//app.js (ES module)
+// app.js (ES module)
 //const API = 'https://api.quotable.io/random';
 const API = 'https://dummyjson.com/quotes/random';
+const STORAGE_KEY = 'quote_history';
+const MAX_HISTORY = 10;
 
 // Fallback quotes
 const FALLBACK = [
@@ -15,18 +17,23 @@ const quoteAuthor = document.getElementById('quote-author');
 const newBtn = document.getElementById('new-quote');
 const copyBtn = document.getElementById('copy-btn');
 const tweetBtn = document.getElementById('tweet-btn');
+const historyList = document.getElementById('history-list');
+const clearHistoryBtn = document.getElementById('clear-history');
+
+// Load history from localStorage
+let quoteHistory = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
 async function fetchQuote() {
     try {
         const res = await fetch(API);
         
-        if(!res.ok)
+        if(!res.ok) 
             throw new Error(`API error: ${res.status}`);
 
         const data = await res.json();
 
-        return { content: data.quote, author: data.author || 'Unkown' };              
-
+        return { content: data.quote, author: data.author || 'Unknown' };
+        
     } catch(err) {
         console.warn('Fetch failed, using fallback quotes:', err);
 
@@ -35,6 +42,37 @@ async function fetchQuote() {
     }
 }
 
+function saveToHistory(quote) {
+    // Prevent duplicate entries if the same quote appears again
+    quoteHistory = quoteHistory.filter(item => item.content !== quote.content);
+
+    // Add newest quote to the front and keep only the last 10
+    quoteHistory = [quote, ...quoteHistory].slice(0, MAX_HISTORY);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(quoteHistory));
+    renderHistory();
+}
+
+function renderHistory() {
+    historyList.innerHTML = '';
+
+    if (quoteHistory.length === 0) {
+        historyList.innerHTML = '<li class="history-empty">No quotes in history yet.</li>';
+        return;
+    }
+
+    quoteHistory.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="history-quote">"${item.content}"</div>
+            <div class="history-author">— ${item.author}</div>
+        `;
+
+        // Clicking a past quote displays it in the main card without re-adding to history
+        li.addEventListener('click', () => renderQuote(item));
+        historyList.appendChild(li);
+    });
+}
 
 function renderQuote({ content, author }) {
     quoteText.textContent = content;
@@ -49,6 +87,7 @@ async function newQuote() {
     try {
         const q = await fetchQuote();
         renderQuote(q);
+        saveToHistory(q);
 
     } catch(err) {
         console.error('Unexpected error fetching quote:', err);
@@ -63,7 +102,7 @@ copyBtn.addEventListener('click', async () => {
     try {
          await navigator.clipboard.writeText(text);
          
-         copyBtn.textContent ='Copied!';
+         copyBtn.textContent = 'Copied!';
          
          //setTimeout(() => (copyBtn.textContent ='Copy'),1500);
 
@@ -80,7 +119,7 @@ copyBtn.addEventListener('click', async () => {
 // share quote on Twitter/X in a new window
 tweetBtn.addEventListener('click', () => {
     const text = `"${quoteText.textContent}" ${quoteAuthor.textContent}`.trim();
-
+    
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
     window.open(
@@ -90,7 +129,15 @@ tweetBtn.addEventListener('click', () => {
     );
 });
 
+// Clear history
+clearHistoryBtn.addEventListener('click', () => {
+    quoteHistory = [];
+    localStorage.removeItem(STORAGE_KEY);
+    renderHistory();
+});
+
 newBtn.addEventListener('click', newQuote);
 
-// inital load
+// Initial load
+renderHistory();
 newQuote();
