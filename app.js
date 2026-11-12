@@ -1,6 +1,6 @@
 //app.js (ES module)
 //const API = 'https://api.quotable.io/random';
-const API = 'https://dummyjson.com/quotes/random';
+const API = 'https://dummyjson.com/quotes/randasdom';
 
 // Fallback quotes
 const FALLBACK = [
@@ -8,8 +8,6 @@ const FALLBACK = [
     { content: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
     { content: "First, solve the problem. Then, write the code.", author: "John Johnson" },
 ];
-
-console.table(FALLBACK);
 
 // DOM elements
 const quoteText = document.getElementById('quote-text');
