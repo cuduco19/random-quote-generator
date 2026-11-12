@@ -41,7 +41,7 @@ function renderQuote({ content, author }) {
     quoteAuthor.textContent = `— ${author}`;
 }
 
-const newQuote = async () => {
+async function newQuote() {
     // show loading state
     quoteText.textContent = 'Loading quote...';
     quoteAuthor.textContent = '';
