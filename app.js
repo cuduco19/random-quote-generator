@@ -9,6 +9,8 @@ const FALLBACK = [
     { content: "First, solve the problem. Then, write the code.", author: "John Johnson" },
 ];
 
+console.table(FALLBACK);
+
 // DOM elements
 const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
