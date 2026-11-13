@@ -55,6 +55,12 @@ button:hover {
     opacity: 0.9;
 }
 
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 button.primary {
     background: #0ea5e9;
     color: #fff;

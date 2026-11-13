@@ -23,23 +23,43 @@ const clearHistoryBtn = document.getElementById('clear-history');
 // Load history from localStorage
 let quoteHistory = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-async function fetchQuote() {
-    try {
-        const res = await fetch(API);
-        
-        if(!res.ok) 
-            throw new Error(`API error: ${res.status}`);
+// Helper to pause execution for a given number of milliseconds
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        const data = await res.json();
+async function fetchQuote(maxRetries = 3, baseDelay = 500) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            const res = await fetch(API);
+            
+            if(!res.ok) {
+                throw new Error(`API error: ${res.status}`);
+            }
 
-        return { content: data.quote, author: data.author || 'Unknown' };
-        
-    } catch(err) {
-        console.warn('Fetch failed, using fallback quotes:', err);
+            const data = await res.json();
+            return { content: data.quote, author: data.author || 'Unknown' };
+            
+        } catch (err) {
+            // If we have used all retries, log a warning and break out to the fallback
+            if (attempt === maxRetries) {
+                console.warn(`All ${maxRetries} retries failed. Using fallback quote:`, err);
+                break;
+            }
 
-        // Choose random fallback
-        return FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
+            // Calculate exponential backoff: 500ms, 1000ms, 2000ms
+            const expDelay = baseDelay * Math.pow(2, attempt);
+
+            // Apply Equal Jitter (guarantees at least 50% of the backoff delay)
+            const half = expDelay / 2;
+            const delay = Math.floor(half + Math.random() * half);
+            
+            console.warn(`Fetch attempt ${attempt + 1} failed. Retrying in ${delay}ms...`, err);
+            
+            await sleep(delay);
+        }
     }
+
+    // Choose random fallback
+    return FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
 }
 
 function saveToHistory(quote) {
@@ -81,6 +101,7 @@ function renderQuote({ content, author }) {
 
 async function newQuote() {
     // show loading state
+    newBtn.disabled = true; // Prevent double-clicks during retries
     quoteText.textContent = 'Loading quote...';
     quoteAuthor.textContent = '';
 
@@ -92,6 +113,8 @@ async function newQuote() {
     } catch(err) {
         console.error('Unexpected error fetching quote:', err);
         renderQuote({ content: 'Could not load quote.', author:'' });
+    } finally {
+        newBtn.disabled = false; // Re-enable button once finished
     }
 }
 
