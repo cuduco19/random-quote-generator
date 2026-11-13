@@ -170,10 +170,21 @@ clearHistoryBtn.addEventListener('click', () => {
 
 newBtn.addEventListener('click', newQuote);
 
-// Initial load
-renderHistory();
-newQuote();
-
 if (typeof module !== 'undefined') {
   module.exports = { renderQuote };
+} else {
+    // Initial load
+    renderHistory();
+    newQuote();
+}
+
+// At the bottom of src/app.js
+if (typeof module !== 'undefined' && module.exports) {
+    // Export functions for Jest without starting the app
+    module.exports = { renderQuote };
+} else {
+    // Run normal startup code only in the browser
+    // Initial load
+    renderHistory();
+    newQuote();
 }
