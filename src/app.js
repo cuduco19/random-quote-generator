@@ -173,3 +173,7 @@ newBtn.addEventListener('click', newQuote);
 // Initial load
 renderHistory();
 newQuote();
+
+if (typeof module !== 'undefined') {
+  module.exports = { renderQuote };
+}

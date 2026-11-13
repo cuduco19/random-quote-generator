@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>renderQuote Unit Tests</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    .pass { color: #15803d; font-weight: 600; }
+    .fail { color: #b91c1c; font-weight: 600; }
+    .fixture { display: none; }
+  </style>
+
+</head>
+<body>
+  <h1>Unit Tests: <code>renderQuote</code></h1>
+  <ul id="results"></ul>
+
+  <!-- Mock DOM elements that renderQuote expects -->
+  <div class="fixture">
+    <div class="card" id="quote-card">
+            <div role="region" aria-label="Random Quote" aria-live="polite">
+                <div class="quote" id="quote-text">Loading quote...</div>
+                <div class="author" id="quote-author"></div>
+            </div>
+            
+            <div class="controls">
+                <button class="tweet" id="tweet-btn">Tweet</button>
+                <button class="secondary" id="copy-btn">Copy</button>
+                <button class="primary" id="new-quote">New Quote</button>
+            </div>
+        </div>
+        <!-- Quote History Section -->
+        <div class="history-card">
+            <div class="history-header">
+                <h2>Recent Quotes</h2>
+                <button class="secondary small-btn" id="clear-history">Clear</button>
+            </div>
+            <ul class="history-list" id="history-list"></ul>
+        </div>
+  </div>
+
+  <script src="/src/app.js" ></script>
+  
+  <!-- Include your app script (or paste renderQuote below) -->
+  <script>
+    const resultsList = document.getElementById('results');
+
+    function test(name, fn) {
+      const li = document.createElement('li');
+      try {
+        fn();
+        li.textContent = `PASS: ${name}`;
+        li.className = 'pass';
+      } catch (err) {
+        li.textContent = `FAIL: ${name} — ${err.message}`;
+        li.className = 'fail';
+      }
+      resultsList.appendChild(li);
+    }
+
+    function assertEqual(actual, expected, label) {
+      if (actual !== expected) {
+        throw new Error(`${label} expected "${expected}", got "${actual}"`);
+      }
+    }
+
+    // Test 1: Renders quote text and author accurately
+    test('updates quote text and author in the DOM', () => {
+      const sampleQuote = {
+        content: 'Simplicity is the ultimate sophistication.',
+        author: 'Leonardo da Vinci'
+      };
+
+      renderQuote(sampleQuote);
+
+      const quoteText = document.getElementById('quote-text').textContent;
+      const authorText = document.getElementById('quote-author').textContent;
+
+      assertEqual(quoteText.includes(sampleQuote.content), true, 'Quote text');
+      assertEqual(authorText.includes(sampleQuote.author), true, 'Author text');
+    });
+
+   // Test 2: Handles quotes with missing or empty authors without crashing
+    test('handles quotes with missing or unknown authors gracefully', () => {
+      const noAuthorQuote = { content: 'Stay curious.', author: '' };
+      renderQuote(noAuthorQuote);
+      const quoteText = document.getElementById('quote-text').textContent;
+        
+      assertEqual(quoteText.includes(noAuthorQuote.content), true, 'Quote text'); 
+   
+    });
+  </script>
+</body>
+</html>
