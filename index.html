@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <meta name="description" content="This page loads a random quote from a public API and lets the user get new quotes. It will also fall back to a local array if the API is unavailable">
+        <meta name="description" content="This page loads a random quote from a public API and lets the user get new quotes. It will also fall back to a local array if the API is unavailable.">
         <title>Random Quote Generator</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,11 @@
     </head>
     <body>
         <div class="card" id="quote-card">
-            <div class="quote" id="quote-text">Loading quote...</div>
-            <div class="author" id="quote-author"></div>
+            <div role="region" aria-label="Random Quote" aria-live="polite">
+                <div class="quote" id="quote-text">Loading quote...</div>
+                <div class="author" id="quote-author"></div>
+            </div>
+            
             <div class="controls">
                 <button class="tweet" id="tweet-btn">Tweet</button>
                 <button class="secondary" id="copy-btn">Copy</button>

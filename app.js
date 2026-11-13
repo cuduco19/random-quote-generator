@@ -90,6 +90,15 @@ function renderHistory() {
 
         // Clicking a past quote displays it in the main card without re-adding to history
         li.addEventListener('click', () => renderQuote(item));
+
+        //Making the history items keyboard-accessible
+        li.setAttribute('tabindex', '0');
+        li.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                renderQuote(item);
+            }
+        });
         historyList.appendChild(li);
     });
 }

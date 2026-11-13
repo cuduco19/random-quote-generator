@@ -62,7 +62,7 @@ button:disabled {
 }
 
 button.primary {
-    background: #0ea5e9;
+    background: #0f669c;
     color: #fff;
 }
 
@@ -72,7 +72,7 @@ button.secondary {
 }
 
 button.tweet {
-    background: #1da1f2;
+    background: #0f669c;
     color: #fff;
     margin-right: auto;
 }
@@ -133,13 +133,26 @@ button.small-btn {
 
 .history-author {
     font-size: 0.8rem;
-    color: #64748b;
+    color: #475569;
     text-align: right;
 }
 
 .history-empty {
-    color: #94a3b8;
+    color: #64748b;
     font-size: 0.9rem;
     text-align: center;
     cursor: default !important;
+}
+
+/* Keep button backgrounds dark, just add the focus outline */
+button:focus-visible {
+    outline: 2px solid #0f669c;
+    outline-offset: 2px;
+}
+
+/* Give history items both the focus outline and subtle highlight */
+.history-list li:not(.history-empty):focus-visible {
+    outline: 2px solid #0f669c;
+    outline-offset: -2px;
+    background: #f8fafc;
 }
