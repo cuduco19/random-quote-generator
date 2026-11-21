@@ -8,7 +8,7 @@ A fast, resilient, and accessible quote generator built with modular vanilla Jav
 
 ## Features
 
-- **Dynamic Quote Fetching:** Asynchronously fetches random quotes from the [DummyJSON Quotes API](https://dummyjson.com).
+- **Dynamic Quote Fetching:** Asynchronously fetches random quotes from the [DummyJSON Quotes API](https://dummyjson.com/quotes/random).
 - **Resilient Networking:** Features exponential backoff retry logic with equal jitter and a fallback to curated local quotes.
 - **Persistent History:** Saves the last 10 unique quotes in `localStorage` with keyboard navigation support.
 - **Sharing Tools:** Copy quotes to the clipboard or share directly to X (Twitter).
