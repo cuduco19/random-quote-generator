@@ -2,10 +2,6 @@
   "name": "random-quote-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "build": "esbuild styles/main.css --bundle --minify --external:*.webp --outfile=dist/styles/main.min.css && esbuild scripts/main.js --bundle --minify --outfile=dist/scripts/main.min.js",
     "test": "jest"

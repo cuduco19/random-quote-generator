@@ -170,7 +170,7 @@ clearHistoryBtn.addEventListener('click', () => {
 
 newBtn.addEventListener('click', newQuote);
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof jest !== 'undefined') {
     // Export functions for Jest without starting the app
     module.exports = {
         renderQuote,
