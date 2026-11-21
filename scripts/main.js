@@ -40,7 +40,7 @@ async function fetchQuote(maxRetries = 3, baseDelay = 500) {
             
         } catch (err) {
             // If we have used all retries, log a warning and break out to the fallback
-            if (attempt === maxRetries) {
+            if (attempt === maxRetries - 1) {
                 console.warn(`All ${maxRetries} retries failed. Using fallback quote:`, err);
                 break;
             }
@@ -143,7 +143,7 @@ copyBtn.addEventListener('click', async () => {
          }, 1500);
 
     } catch(err) {
-        console.err('Copy failed', err);
+        console.error('Copy failed', err);
         alert('Copy failed. Your browser may not support clipboard API.');
     }
 });
@@ -169,14 +169,6 @@ clearHistoryBtn.addEventListener('click', () => {
 });
 
 newBtn.addEventListener('click', newQuote);
-
-if (typeof module !== 'undefined') {
-  module.exports = { renderQuote };
-} else {
-    // Initial load
-    renderHistory();
-    newQuote();
-}
 
 // At the bottom of src/app.js
 if (typeof module !== 'undefined' && module.exports) {
